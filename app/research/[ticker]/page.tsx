@@ -562,12 +562,16 @@ export default function ResearchPage() {
                 Strengths
               </span>
               <ul className="space-y-2">
-                {report.swot.strengths.map((item, idx) => (
-                  <li key={idx} className="text-xs text-gray-300 leading-relaxed flex items-start gap-2">
-                    <span className="text-emerald-400 select-none mt-0.5">•</span>
-                    <span>{item}</span>
-                  </li>
-                ))}
+                {Array.isArray(report.swot?.strengths) ? (
+                  report.swot.strengths.map((item, idx) => (
+                    <li key={idx} className="text-xs text-gray-300 leading-relaxed flex items-start gap-2">
+                      <span className="text-emerald-400 select-none mt-0.5">•</span>
+                      <span>{item}</span>
+                    </li>
+                  ))
+                ) : (
+                  <li className="text-xs text-gray-500 italic">No strengths logged.</li>
+                )}
               </ul>
             </div>
 
@@ -577,12 +581,16 @@ export default function ResearchPage() {
                 Weaknesses
               </span>
               <ul className="space-y-2">
-                {report.swot.weaknesses.map((item, idx) => (
-                  <li key={idx} className="text-xs text-gray-300 leading-relaxed flex items-start gap-2">
-                    <span className="text-rose-400 select-none mt-0.5">•</span>
-                    <span>{item}</span>
-                  </li>
-                ))}
+                {Array.isArray(report.swot?.weaknesses) ? (
+                  report.swot.weaknesses.map((item, idx) => (
+                    <li key={idx} className="text-xs text-gray-300 leading-relaxed flex items-start gap-2">
+                      <span className="text-rose-400 select-none mt-0.5">•</span>
+                      <span>{item}</span>
+                    </li>
+                  ))
+                ) : (
+                  <li className="text-xs text-gray-500 italic">No weaknesses logged.</li>
+                )}
               </ul>
             </div>
 
@@ -592,12 +600,16 @@ export default function ResearchPage() {
                 Opportunities
               </span>
               <ul className="space-y-2">
-                {report.swot.opportunities.map((item, idx) => (
-                  <li key={idx} className="text-xs text-gray-300 leading-relaxed flex items-start gap-2">
-                    <span className="text-indigo-400 select-none mt-0.5">•</span>
-                    <span>{item}</span>
-                  </li>
-                ))}
+                {Array.isArray(report.swot?.opportunities) ? (
+                  report.swot.opportunities.map((item, idx) => (
+                    <li key={idx} className="text-xs text-gray-300 leading-relaxed flex items-start gap-2">
+                      <span className="text-indigo-400 select-none mt-0.5">•</span>
+                      <span>{item}</span>
+                    </li>
+                  ))
+                ) : (
+                  <li className="text-xs text-gray-500 italic">No opportunities logged.</li>
+                )}
               </ul>
             </div>
 
@@ -607,12 +619,16 @@ export default function ResearchPage() {
                 Threats
               </span>
               <ul className="space-y-2">
-                {report.swot.threats.map((item, idx) => (
-                  <li key={idx} className="text-xs text-gray-300 leading-relaxed flex items-start gap-2">
-                    <span className="text-amber-400 select-none mt-0.5">•</span>
-                    <span>{item}</span>
-                  </li>
-                ))}
+                {Array.isArray(report.swot?.threats) ? (
+                  report.swot.threats.map((item, idx) => (
+                    <li key={idx} className="text-xs text-gray-300 leading-relaxed flex items-start gap-2">
+                      <span className="text-amber-400 select-none mt-0.5">•</span>
+                      <span>{item}</span>
+                    </li>
+                  ))
+                ) : (
+                  <li className="text-xs text-gray-500 italic">No threats logged.</li>
+                )}
               </ul>
             </div>
           </div>
@@ -650,7 +666,7 @@ export default function ResearchPage() {
                   <td className="py-3.5">{report.financials.operatingMargin}%</td>
                 </tr>
                 {/* Competitors */}
-                {report.competitors.map((comp) => (
+                {Array.isArray(report.competitors) && report.competitors.map((comp) => (
                   <tr key={comp.ticker} className="text-gray-300">
                     <td className="py-3.5 pr-4 font-medium">{comp.name}</td>
                     <td className="py-3.5 font-mono text-gray-500">{comp.ticker}</td>
@@ -676,11 +692,11 @@ export default function ResearchPage() {
               
               <div className="space-y-4 text-xs">
                 {[
-                  { label: 'Business Risk', desc: report.risk.businessRisk },
-                  { label: 'Market Risk', desc: report.risk.marketRisk },
-                  { label: 'Regulatory Risk', desc: report.risk.regulatoryRisk },
-                  { label: 'Technology Risk', desc: report.risk.technologyRisk },
-                  { label: 'Financial Risk', desc: report.risk.financialRisk }
+                  { label: 'Business Risk', desc: report.risk?.businessRisk || 'No critical factors identified.' },
+                  { label: 'Market Risk', desc: report.risk?.marketRisk || 'No critical factors identified.' },
+                  { label: 'Regulatory Risk', desc: report.risk?.regulatoryRisk || 'No critical factors identified.' },
+                  { label: 'Technology Risk', desc: report.risk?.technologyRisk || 'No critical factors identified.' },
+                  { label: 'Financial Risk', desc: report.risk?.financialRisk || 'No critical factors identified.' }
                 ].map((item) => (
                   <div key={item.label} className="border-b border-white/5 pb-3 last:border-b-0 last:pb-0">
                     <span className="font-bold text-white block">{item.label}</span>
@@ -698,34 +714,38 @@ export default function ResearchPage() {
             </h3>
 
             <div className="space-y-4">
-              {report.news.map((item, idx) => {
-                const isPos = item.sentiment === 'positive';
-                const isNeg = item.sentiment === 'negative';
-                return (
-                  <div key={idx} className="rounded-xl border border-white/5 bg-white/5 p-4">
-                    <div className="flex justify-between items-start gap-4">
-                      <span className="text-[10px] font-bold text-gray-500">
-                        {item.source} • {item.date}
-                      </span>
-                      <span className={`rounded-full px-2 py-0.5 text-[9px] font-extrabold uppercase border ${
-                        isPos 
-                          ? 'bg-emerald-500/10 text-emerald-400 border-emerald-500/20' 
-                          : isNeg
-                          ? 'bg-rose-500/10 text-rose-400 border-rose-500/20'
-                          : 'bg-white/5 text-gray-400 border-white/10'
-                      }`}>
-                        {item.sentiment}
-                      </span>
+              {Array.isArray(report.news) ? (
+                report.news.map((item, idx) => {
+                  const isPos = item.sentiment === 'positive';
+                  const isNeg = item.sentiment === 'negative';
+                  return (
+                    <div key={idx} className="rounded-xl border border-white/5 bg-white/5 p-4">
+                      <div className="flex justify-between items-start gap-4">
+                        <span className="text-[10px] font-bold text-gray-500">
+                          {item.source} • {item.date}
+                        </span>
+                        <span className={`rounded-full px-2 py-0.5 text-[9px] font-extrabold uppercase border ${
+                          isPos 
+                            ? 'bg-emerald-500/10 text-emerald-400 border-emerald-500/20' 
+                            : isNeg
+                            ? 'bg-rose-500/10 text-rose-400 border-rose-500/20'
+                            : 'bg-white/5 text-gray-400 border-white/10'
+                        }`}>
+                          {item.sentiment}
+                        </span>
+                      </div>
+                      <h4 className="text-xs font-bold text-white mt-1.5 leading-snug">
+                        {item.title}
+                      </h4>
+                      <p className="text-[11px] text-gray-400 mt-1.5 leading-relaxed">
+                        {item.summary}
+                      </p>
                     </div>
-                    <h4 className="text-xs font-bold text-white mt-1.5 leading-snug">
-                      {item.title}
-                    </h4>
-                    <p className="text-[11px] text-gray-400 mt-1.5 leading-relaxed">
-                      {item.summary}
-                    </p>
-                  </div>
-                );
-              })}
+                  );
+                })
+              ) : (
+                <p className="text-xs text-gray-500 italic">No news feeds available for this asset.</p>
+              )}
             </div>
           </div>
         </div>
