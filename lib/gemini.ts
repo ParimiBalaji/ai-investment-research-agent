@@ -32,7 +32,7 @@ async function generateNvidiaText(prompt: string, systemInstruction?: string): P
       "Authorization": `Bearer ${apiKey}`
     },
     body: JSON.stringify({
-      model: "meta/llama-3.1-70b-instruct",
+      model: "meta/llama-3.1-8b-instruct",
       messages,
       temperature: 0.2,
       max_tokens: 1500
@@ -68,7 +68,7 @@ async function generateNvidiaJSON<T>(prompt: string, systemInstruction?: string)
       "Authorization": `Bearer ${apiKey}`
     },
     body: JSON.stringify({
-      model: "meta/llama-3.1-70b-instruct",
+      model: "meta/llama-3.1-8b-instruct",
       messages,
       temperature: 0.1,
       max_tokens: 1500
